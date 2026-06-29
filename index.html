@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قطة الإنماء الذكية | Alinma Smart-Share</title>
+    <style>
+        /* الهوية البصرية: ألوان بنك الإنماء وأكاديمية طويق */
+        :root {
+            --alinma-blue: #005691;
+            --alinma-gold: #D2A245;
+            --tuwaiq-purple: #4A154B;
+            --dark-bg: #0b141a;
+            --card-bg: #13222d;
+            --text-light: #ffffff;
+            --text-muted: #8fa3b2;
+            --success: #28a745;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-center: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* حاوية الجوال المحاكية للتطبيق */
+        .phone-container {
+            width: 100%;
+            max-width: 412px;
+            height: 850px;
+            background-color: #0f1c26;
+            border: 8px solid #2c3e50;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* شريط الحالة العلوي */
+        .status-bar {
+            padding: 15px 30px 5px 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* الهيدر وشعارات الشركاء */
+        .app-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--alinma-blue), #003356);
+            border-bottom: 3px solid var(--alinma-gold);
+            text-align: center;
+            border-radius: 0 0 25px 25px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .badge-alinma {
+            color: var(--alinma-gold);
+            font-weight: bold;
+            font-size: 14px;
+            border-left: 2px solid var(--text-muted);
+            padding-left: 8px;
+        }
+
+        .badge-tuwaiq {
+            color: #fff;
+            font-size: 12px;
+            background: rgb(255 255 255 / 10%);
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .app-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            color: #fff;
+        }
+
+        .app-subtitle {
+            font-size: 12px;
+            color: var(--alinma-gold);
+            letter-spacing: 1px;
+        }
+
+        /* المحتوى الداخلي */
+        .app-content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 15px;
+            color: var(--alinma-gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* كرت الحساب المؤقت النشط */
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(210, 162, 69, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .status-badge {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .limit-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        /* الميزات الأربعة بشكل تفاعلي */
+        .grid-features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .mini-feature {
+            background: #162a3a;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            border-right: 4px solid var(--alinma-blue);
+        }
+
+        .mini-feature strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .mini-feature p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* التفاعل والمحاكاة الاحترافية للتحكيم */
+        .interactive-panel {
+            background: linear-gradient(180deg, #183044, #112230);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px dashed var(--alinma-gold);
+        }
+
+        .btn-action {
+            background: linear-gradient(90deg, var(--alinma-gold), #b3842f);
+            color: #000;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.02);
+        }
+
+        /* نافذة الإشعارات اللحظية المحاكية */
+        .live-notification {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* فوتر التطبيق */
+        .app-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <!-- شريط الجوال العلوي -->
+        <div class="status-bar">
+            <span>5G</span>
+            <span>03:00 م</span>
+        </div>
+
+        <!-- الهيدر المدمج بين الإنماء وطويق -->
+        <header class="app-header">
+            <div class="badges">
+                <span class="badge-alinma">مصرف الإنماء</span>
+                <span class="badge-tuwaiq">معسكر طويق السيبراني 🚀</span>
+            </div>
+            <div class="app-title">قطة الإنماء الذكية</div>
+            <div class="app-subtitle">Alinma Smart-Share</div>
+        </header>
+
+        <!-- المحتوى والتطبيق الفعلي -->
+        <div class="app-content">
+            
+            <div class="section-title">📊 الحساب الفرعي المؤقت الحالي</div>
+            
+            <!-- كرت الحساب المؤقت النشط (حوكمة الحساب) -->
+            <div class="feature-card">
+                <div class="status-badge">● حساب واحد نشط حالياً</div>
+                <h3 style="margin:5px 0; font-size: 16px;">رحلة شباب الاستراحة 🌴</h3>
+                <p style="color: var(--text-muted); font-size:12px; margin: 5px 0;">رابط ذكي نشط وآمن موثق عبر نfaذ</p>
+                
+                <div class="limit-info">
+                    <div>الحد الأدنى: <strong>50 ر.س</strong></div>
+                    <div>الحد الأعلى: <strong>500 ر.س</strong></div>
+                </div>
+            </div>
+
+            <div class="section-title">⚙️ ركائز الابتكار والمميزات</div>
+            
+            <!-- شبكة المميزات الأربعة الأساسية المحدثة -->
+            <div class="grid-features">
+                <div class="mini-feature" style="border-right-color: var(--alinma-gold);">
+                    <strong>1. حوكمة الحساب والحدود</strong>
+                    <p>منع العشوائية بحساب مؤقت واحد فقط نشط في نفس الوقت مع تحكم كامل بالحدود.</p>
+                </div>
+                
+                <div class="mini-feature" style="border-right-color: #00bcd4;">
+                    <strong>2. ربط وحماية البطاقات (Shielding)</strong>
+                    <p>اربط بطاقتك الحالية (مدى/فيزا) بأمان مطلق مع عزل تام وصلاحية خصم محددة فقط.</p>
+                </div>
+
+                <div class="mini-feature" style="border-right-color: var(--success);">
+                    <strong>3. توثيق رقمي ورسوم صفرية %0</strong>
+                    <p>توثيق فوري عبر (نفاذ) لجميع الأعضاء والعمليات مجانية بالكامل كحوالات داخلية.</p>
+                </div>
+
+                <div class="mini-feature" style="border-right-color: #ff9800;">
+                    <strong>4. شفافية وتصفية تلقائية</strong>
+                    <p>إشعارات فورية جماعية لكل عملية خصم، وتصفية واسترداد تلقائي عند انتهاء الوقت.</p>
+                </div>
+            </div>
+
+            <!-- لوحة المحاكاة التفاعلية للجنة التحكيم -->
+            <div class="interactive-panel">
+                <span style="font-size: 12px; color: var(--alinma-gold); font-weight: bold; display: block; margin-bottom: 8px;">🎮 لوحة تجربة لجنة التحكيم اللحظية:</span>
+                <p style="font-size: 11px; margin: 0 0 10px 0; color: #fff;">اضغط على الأزرار لتوضيح السيناريو الحي أمام المقيمين:</p>
+                
+                <button class="btn-action" onclick="simulateExpense()">محاكاة خصم مبلغ (شفافية فورية)</button>
+                <button class="btn-action" style="background: linear-gradient(90deg, #e74c3c, #c0392b); color: white;" onclick="simulateSettle()">محاكاة انتهاء الوقت والتصفية الآلية</button>
+                
+                <!-- مكان ظهور الإشعارات الحية -->
+                <div id="liveAlert" class="live-notification"></div>
+            </div>
+
+        </div>
+
+        <!-- الفوتر -->
+        <footer class="app-footer">
+            مصرف الإنماء © 2026 - رؤية ابتكارية مدعومة من أكاديمية طويق
+        </footer>
+    </div>
+
+    <!-- البرمجة التفاعلية للمحاكاة -->
+    <script>
+        function simulateExpense() {
+            const alertBox = document.getElementById('liveAlert');
+            alertBox.style.backgroundColor = '#28a745';
+            alertBox.innerHTML = '🔔 <strong>إشعار فوري لجميع الأعضاء:</strong> تم خصم 150 ريال لشراء (عشاء) بواسطة العضو: محمد أحمد. المتبقي مسترد تلقائياً.';
+            alertBox.style.display = 'block';
+        }
+
+        function simulateSettle() {
+            const alertBox = document.getElementById('liveAlert');
+            alertBox.style.backgroundColor = '#005691';
+            alertBox.innerHTML = '⏳ <strong>تصفية تلقائية:</strong> انتهى الوقت! تم تجميد الحساب، إلغاء ربط البطاقات فوراً، وإعادة المبالغ المتبقية بالتناسب لحسابات الأعضاء آلياً وبدون رسوم %0.';
+            alertBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
