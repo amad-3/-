@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تطبيق قطة الإنماء الذكية | نسخة الجوال</title>
+    <title>تطبيق قطة الإنماء الذكية | المحاكاة التفاعلية الكاملة</title>
     <style>
         :root {
             --alinma-blue: #005691;
-            --alinma-light: #E6F0F8;
+            --alinma-light-blue: #007bbd;
             --alinma-gold: #D2A245;
             --bg-light: #F4F7F9;
             --panel-white: #FFFFFF;
@@ -32,44 +32,145 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* هيدر التطبيق متناسق مع شاشات الجوال */
+        /* شريط الحوكمة والامتثال البنكي */
+        .governance-bar {
+            background: #FFF9E6;
+            color: #8A6D1C;
+            font-size: 10px;
+            text-align: center;
+            padding: 5px 10px;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(210, 162, 69, 0.2);
+        }
+
+        /* هيدر التطبيق المتطور */
         .app-header {
             background: var(--panel-white);
             border-bottom: 3px solid var(--alinma-gold);
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .menu-btn {
+            background: var(--alinma-blue);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .brand-container h1 {
             margin: 0;
-            font-size: 18px;
+            font-size: 14px;
             color: var(--alinma-blue);
             font-weight: 800;
         }
 
         .brand-container span {
-            font-size: 11px;
+            font-size: 9px;
             color: var(--text-muted);
             display: block;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
-        .twq-badge {
-            align-self: flex-start;
-            background: linear-gradient(135deg, #4A154B, #6B21A8); 
-            color: white; 
-            padding: 4px 10px; 
-            border-radius: 15px; 
-            font-size: 10px; 
+        /* القائمة الجانبية المنبثقة الذكية */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            right: -290px;
+            width: 290px;
+            height: 100%;
+            background: var(--panel-white);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: right 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar-menu.open { right: 0; }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .menu-title {
+            color: var(--alinma-blue);
+            font-size: 15px;
             font-weight: bold;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* حاوية العميل الرئيسية المخصصة للجوال */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 12px;
+            background: #F8FAFC;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-right: 3px solid transparent;
+        }
+        .menu-item:hover { background: var(--alinma-light); border-right-color: var(--alinma-gold); }
+
+        /* الشاشات الفرعية الديناميكية الكاملة المحاكية للنظام الحقيقي */
+        .sub-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            background: var(--bg-light);
+            z-index: 500;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            animation: screenFadeIn 0.3s ease;
+        }
+
+        @keyframes screenFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .back-btn {
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-bottom: 20px;
+        }
+
+        /* حاوية المحتوى الرئيسي للجوال */
         .client-container {
             width: 100%;
             padding: 15px;
@@ -79,63 +180,67 @@
             flex: 1;
         }
 
-        /* الكروت وتأثير الظلال العائمة النظيفة */
         .card-white { 
             background: var(--panel-white); 
             border: 1px solid var(--border); 
             border-radius: 14px; 
             padding: 16px; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.01);
-            transition: all 0.3s ease;
         }
         
         .section-title { 
-            font-size: 14px; 
+            font-size: 13px; 
             font-weight: 700; 
             color: var(--alinma-blue); 
             margin-top: 0; 
             margin-bottom: 15px; 
             display: flex; 
             align-items: center; 
-            gap: 8px; 
+            gap: 6px; 
         }
 
-        /* تصميم بطاقة البنك المرن المتجاوب مع شاشة الجوال بالكامل */
-        .cards-flex { 
-            display: flex; 
-            flex-direction: column;
-            gap: 15px; 
+        /* محفظة البطائق المتعددة */
+        .cards-slider {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
         }
-        
+        .cards-slider::-webkit-scrollbar { display: none; }
+
         .bank-card {
-            width: 100%;
-            max-width: 340px;
-            height: 190px;
+            min-width: 265px;
+            width: 265px;
+            height: 150px;
             background: linear-gradient(135deg, #004B79, #00253D);
-            border-radius: 14px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 15px;
             color: white;
             position: relative;
-            box-shadow: 0 6px 15px rgba(0, 51, 86, 0.15);
-            border: 3px solid var(--alinma-gold);
-            margin: 0 auto;
+            box-shadow: 0 4px 10px rgba(0, 51, 86, 0.1);
+            border: 2px solid transparent;
         }
+        .bank-card.active-shield {
+            border-color: var(--alinma-gold);
+            background: linear-gradient(135deg, #005691, #003F6B);
+        }
+        .bank-card.visa { background: linear-gradient(135deg, #1E293B, #0F172A); }
 
-        .card-type { font-size: 16px; font-weight: bold; font-style: italic; text-align: left; }
-        .card-number { font-size: 16px; letter-spacing: 2px; margin-top: 30px; text-align: center; }
-        .card-holder { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 30px; }
+        .card-type { font-size: 14px; font-weight: bold; font-style: italic; }
+        .card-number { font-size: 14px; letter-spacing: 2px; margin-top: 20px; text-align: center; }
+        .card-holder { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 22px; }
         
-        /* إيماءة نبض درع الأمان التلقائي خلف الخلفية */
         .shield-status-badge {
             position: absolute;
-            top: 18px;
-            left: 18px;
+            top: 12px;
+            left: 12px;
             background: rgba(210, 162, 69, 0.25);
             border: 1px solid var(--alinma-gold);
             color: var(--alinma-gold);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
             font-weight: bold;
             animation: pulseGlow 2s infinite ease-in-out;
         }
@@ -146,172 +251,191 @@
             100% { box-shadow: 0 0 0 0 rgba(210, 162, 69, 0); }
         }
 
-        /* عدادات مالية متراصة ومثالية لعرض الجوال */
-        .financial-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 8px; 
-        }
-        .fin-box { 
-            background: #F8FAFC; 
-            border: 1px solid var(--border); 
-            border-radius: 10px; 
-            padding: 12px 6px; 
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .fin-box span { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 6px; line-height: 1.2; }
-        .fin-box strong { font-size: 13px; color: var(--text-dark); display: inline-block; }
+        /* العدادات المالية */
+        .financial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .fin-box { background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 10px 4px; text-align: center; }
+        .fin-box span { font-size: 9px; color: var(--text-muted); display: block; margin-bottom: 4px; line-height: 1.2; }
+        .fin-box strong { font-size: 12px; color: var(--text-dark); }
         
-        /* وميض لوني لإيماءات تحديث البيانات المالية */
         .flash-update { animation: textHighlight 0.6s ease-out; }
-        @keyframes textHighlight {
-            0% { transform: scale(1.1); color: var(--alinma-gold); }
-            100% { transform: scale(1); }
-        }
+        @keyframes textHighlight { 0% { transform: scale(1.1); color: var(--alinma-gold); } 100% { transform: scale(1); } }
 
-        /* قائمة الشفافية والخصومات لفلوس العميل */
-        .transactions-list { display: flex; flex-direction: column; gap: 10px; }
-        .tx-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 12px; 
-            background: #F8FAFC; 
-            border-radius: 10px; 
-            border-right: 4px solid var(--border);
-            animation: itemSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-        }
-        .tx-item.minus { border-right-color: var(--danger); background: #FFFDFD; }
-        .tx-item.plus { border-right-color: var(--success); background: #FDFDFD; }
-        .tx-info h5 { margin: 0 0 2px 0; font-size: 12px; color: var(--text-dark); }
-        .tx-info span { font-size: 10px; color: var(--text-muted); }
-        .tx-amount { font-weight: bold; font-size: 12px; white-space: nowrap; }
-
-        @keyframes itemSlideIn {
-            from { opacity: 0; transform: translateX(15px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        /* أزرار تفاعلية مرنة ومريحة للمس باليد */
+        /* أزرار لوحة المحاكاة */
         .interactive-btn { 
             width: 100%; 
             background: linear-gradient(135deg, var(--alinma-blue), #003F6B); 
             color: white; 
             border: none; 
-            padding: 14px; 
-            border-radius: 10px; 
+            padding: 13px; 
+            border-radius: 8px; 
             font-weight: bold; 
-            font-size: 12px; 
+            font-size: 11px; 
             cursor: pointer; 
-            box-shadow: 0 3px 8px rgba(0, 86, 145, 0.12);
-            transition: all 0.2s ease;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
-        .interactive-btn:last-child { margin-bottom: 0; }
-        .interactive-btn:active { transform: scale(0.98); opacity: 0.9; }
-        
-        .interactive-btn.danger { background: linear-gradient(135deg, var(--danger), #C1272D); box-shadow: 0 3px 8px rgba(239, 68, 68, 0.12); }
+        .interactive-btn.danger { background: linear-gradient(135deg, var(--danger), #C1272D); }
 
-        /* بنر التنبيهات المنزلق ذو المظهر الانسيابي الجذاب */
+        /* بنر التنبيهات */
         .live-alert-banner { 
-            background: #ECFDF5; 
-            border: 1px solid var(--success); 
-            color: #065F46; 
-            padding: 12px; 
-            border-radius: 10px; 
-            font-size: 12px; 
-            line-height: 1.4;
-            margin-bottom: 5px; 
-            display: none; 
-            animation: bannerReveal 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: #ECFDF5; border: 1px solid var(--success); color: #065F46; padding: 12px; border-radius: 10px; font-size: 11px; line-height: 1.4; margin-bottom: 5px; display: none; 
+            animation: bannerReveal 0.4s ease;
         }
-        @keyframes bannerReveal {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes bannerReveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .info-list {
-            margin: 0; padding-right: 15px; font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;
-        }
+        /* سجل الشفافية والعمليات */
+        .transactions-list { display: flex; flex-direction: column; gap: 8px; }
+        .tx-item { display: flex; justify-content: space-between; align-items: center; padding: 11px; background: #F8FAFC; border-radius: 8px; border-right: 4px solid var(--border); }
+        .tx-item.minus { border-right-color: var(--danger); background: #FFFDFD; }
+        .tx-item.plus { border-right-color: var(--success); background: #FDFDFD; }
+        .tx-info h5 { margin: 0 0 2px 0; font-size: 11px; }
+        .tx-info span { font-size: 9px; color: var(--text-muted); }
+        .tx-amount { font-weight: bold; font-size: 11px; }
     </style>
 </head>
 <body>
 
+    <!-- شريط الحوكمة العلوي للتطبيق -->
+    <div class="governance-bar">🛡️ حوكمة الحساب: متاح حساب فرعي مؤقت واحد فقط نشط بالوقت نفسه</div>
+
+    <!-- هيدر التطبيق الرئيسي المطور للجوال -->
     <header class="app-header">
+        <button class="menu-btn" onclick="toggleMenu(true)">☰ خيارات الميزة</button>
         <div class="brand-container">
-            <h1>قطة الإنماء الذكية (Alinma Smart-Share)</h1>
-            <span>بوابة الابتكار وهندسة الأتمتة المصرفية</span>
-        </div>
-        <div class="twq-badge">
-            🚀 مدعوم تقنياً من أكاديمية طويق
+            <h1>قطة الإنماء الذكية (Smart-Share)</h1>
+            <span>أكاديمية طويق × مصرف الإنماء</span>
         </div>
     </header>
 
-    <main class="client-container">
+    <!-- القائمة الجانبية المنبثقة التفاعلية للخيارات المتقدمة -->
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMenu(false)"></div>
+    <aside id="sidebarMenu" class="sidebar-menu">
+        <div class="menu-title">
+            <span>⚙️ لوحة الخدمات الإضافية</span>
+            <button style="border: none; background: none; font-size: 16px; cursor: pointer;" onclick="toggleMenu(false)">✕</button>
+        </div>
+        <div class="menu-item" onclick="openSubScreen('annualReportScreen')">
+            <span>📊 كشف الحساب السنوي للقطات</span> <span>◀</span>
+        </div>
+        <div class="menu-item" onclick="openSubScreen('historyScreen')">
+            <span>🌴 تاريخ قطاتك السابقة</span> <span>◀</span>
+        </div>
+        <div class="menu-item" onclick="openSubScreen('nafadhScreen')">
+            <span>🔑 توثيق الهوية الرقمية (نفاذ)</span> <span>◀</span>
+        </div>
+    </aside>
+
+    <!-- الشاشات الفرعية الحية (تفتح بالكامل عند الضغط عليها) -->
+    <!-- 1. شاشة كشف الحساب السنوي للقطات -->
+    <div id="annualReportScreen" class="sub-screen">
+        <button class="back-btn" onclick="closeSubScreen('annualReportScreen')">🔕 العودة للتطبيق الرئيسي</button>
+        <div class="card-white">
+            <h3 style="color: var(--alinma-blue); margin: 0 0 15px 0; font-size: 15px;">📊 التقرير المالي السنوي لحسابات القطة المشتركة</h3>
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">إحصائيات إجمالية لعملياتك التشاركية المؤتمتة داخل مصرف الإنماء لعام 2026:</p>
+            <div style="background: #F8FAFC; padding: 15px; border-radius: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 8px; border-right: 4px solid var(--alinma-gold);">
+                <div>إجمالي القطات المنشأة: <strong>4 روابط ذكية</strong></div>
+                <div>إجمالي المبالغ المستردة تلقائياً: <strong>1,450.00 ر.س</strong></div>
+                <div>الرسوم الإدارية أو البوابية المدفوعة: <strong style="color: var(--success);">0.00 ر.س (%0 مجاني بالكامل)</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. شاشة تاريخ القطات السابقة -->
+    <div id="historyScreen" class="sub-screen">
+        <button class="back-btn" onclick="closeSubScreen('historyScreen')">🔕 العودة للتطبيق الرئيسي</button>
+        <div class="card-white">
+            <h3 style="color: var(--alinma-blue); margin: 0 0 15px 0; font-size: 15px;">🌴 تاريخ مشاركاتك في القّطات السابقة</h3>
+            <div class="transactions-list">
+                <div class="tx-item" style="border-right-color: var(--success);">
+                    <div class="tx-info"><h5>قطة عشاء التخرج (استراحة نمار)</h5><span>الحالة: تمت التصفية والاسترداد آلياً</span></div>
+                    <div style="font-size: 11px; font-weight: bold; color: var(--success);">مسترد 140 ر.س</div>
+                </div>
+                <div class="tx-item" style="border-right-color: var(--success);">
+                    <div class="tx-info"><h5>قطة هدية المدرب المعسكر</h5><span>الحالة: تمت التصفية بنجاح</span></div>
+                    <div style="font-size: 11px; font-weight: bold; color: var(--text-muted);">تم الصرف بالكامل</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. شاشة إدارة توثيق نفاذ القانوني -->
+    <div id="nafadhScreen" class="sub-screen">
+        <button class="back-btn" onclick="closeSubScreen('nafadhScreen')">🔕 العودة للتطبيق الرئيسي</button>
+        <div class="card-white" style="border-right: 4px solid var(--success);">
+            <h3 style="color: var(--success); margin: 0 0 10px 0; font-size: 14px;">✓ ربط الامتثال القانوني بنظام (نفاذ)</h3>
+            <p style="font-size: 12px; color: var(--text-dark); line-height: 1.5; margin: 0;">
+                جميع العمليات المودعة أو المسحوبة داخل ميزة <strong>قطة الإنماء الذكية</strong> يتم توثيقها مسبقاً عبر النفاذ الوطني الموحد، مما يلغي تماماً الشبهات القانونية لجمع الأموال العشوائي ويضمن أمان الحسابات بنسبة 100%.
+            </p>
+        </div>
+    </div>
+
+    <!-- الحاوية العمودية للتطبيق الرئيسي المخصص للجوال -->
+    <main class="client-container" id="mainAppContent">
         
+        <!-- بنر الإشعارات الفورية الحية للشفافية -->
         <div id="liveAlertBanner" class="live-alert-banner"></div>
 
+        <!-- 1. محفظة بطاقات إبراهيم الدوارة -->
         <div class="card-white">
-            <div class="section-title">💳 بطاقتي الشخصية المربوطة حالياً</div>
-            <div class="cards-flex">
-                <div class="bank-card" id="mainBankCard">
+            <div class="section-title">💳 محفظة بطاقتي الشخصية الحالية (اسحب لليمين)</div>
+            <div class="cards-slider">
+                <div class="bank-card active-shield">
                     <div class="card-type">مدى mada</div>
-                    <div class="shield-status-badge" id="shieldBadge">🛡️ درع الحماية نشط</div>
+                    <div class="shield-status-badge">🛡️ درع الحماية نشط</div>
                     <div class="card-number">**** **** **** 4820</div>
-                    <div class="card-holder">نايف الحربي</div>
+                    <div class="card-holder">إبراهيم آل زايد</div>
                 </div>
-                <div style="text-align: center; padding: 5px 10px 0 10px;">
-                    <p style="margin:0; font-size: 11px; color: var(--text-muted); line-height: 1.4;">
-                        تم ربط بطاقتك mada بنظام حماية يضمن حصر السحب في حدود ميزانيتك المقررة وعزل حساباتك الأخرى تماماً.
-                    </p>
+                <div class="bank-card visa">
+                    <div class="card-type">Visa الائتمانية</div>
+                    <div class="card-number">**** **** **** 9011</div>
+                    <div class="card-holder">إبراهيم آل زايد</div>
                 </div>
             </div>
         </div>
 
+        <!-- 2. لوحة التحكم المالي لفلوس العميل الحالية -->
         <div class="card-white">
-            <div class="section-title">💰 لوحة التحكم المالي لحصتي</div>
+            <div class="section-title">💰 لوحة التحكم المالي لحصتي الشخصية</div>
             <div class="financial-grid">
-                <div class="fin-box" id="box1">
-                    <span>حصتي المودعة المعتمدة</span>
+                <div class="fin-box">
+                    <span>حصتي المعتمدة بالقطة</span>
                     <strong id="myTotalDeposit">300.00 ر.س</strong>
                 </div>
-                <div class="fin-box" id="box2">
-                    <span>المصروف حتى الآن</span>
+                <div class="fin-box">
+                    <span>المصروف الفعلي منها</span>
                     <strong id="mySpentAmount" style="color: var(--text-muted);">0.00 ر.س</strong>
                 </div>
-                <div class="fin-box" id="box3" style="background: #F0FDF4; border-color: rgba(16, 185, 129, 0.2);">
+                <div class="fin-box" style="background: #F0FDF4; border-color: rgba(16, 185, 129, 0.2);">
                     <span>المتاح للاسترداد</span>
                     <strong id="myRefundableAmount" style="color: var(--success);">300.00 ر.س</strong>
                 </div>
             </div>
         </div>
 
+        <!-- 3. جهاز تجربة المحاكاة التفاعلية للجنة التقييم -->
         <div class="card-white" style="border-color: var(--alinma-gold); background: linear-gradient(180deg, #FFFFFF, #FAFBFB);">
-            <div class="section-title"> جهاز المحاكاة التفاعلي الحي</div>
-            <div style="display: flex; flex-direction: column;">
-                <button class="interactive-btn" onclick="simulateClientExpense()">سيناريو 1: محاكاة خصم العشاء (100 ر.س)</button>
-                <button class="interactive-btn danger" onclick="simulateAutoSettle()">سيناريو 2: تصفية الوقت واسترداد الفائض</button>
-            </div>
+            <div class="section-title">🎮 لوحة اختبار محاكاة السيناريوهات الحية</div>
+            <button class="interactive-btn" onclick="simulateClientExpense()">سيناريو 1: محاكاة خصم مشترك (100 ر.س من حصتك)</button>
+            <button class="interactive-btn danger" onclick="simulateAutoSettle()">سيناريو 2: انتهاء وقت القطة والتصفية الفورية</button>
         </div>
 
+        <!-- 4. تفاصيل المجموعة المفتوحة حالياً -->
         <div class="card-white">
-            <div class="section-title">📌 تفاصيل المجموعة المؤقتة</div>
-            <ul class="info-list">
-                <li><strong>الاسم:</strong> رحلة شباب الاستراحة 🌴</li>
-                <li><strong>المسؤول:</strong> فهد الرويلي</li>
-                <li><strong>التوثيق:</strong> نفاذ الهوية الرقمية</li>
-                <li><strong>الوقت المتبقي:</strong> <span style="color: var(--danger); font-weight: bold;">02:41:15</span></li>
+            <div class="section-title">📌 تفاصيل المجموعة المؤقتة الحالية</div>
+            <ul style="margin: 0; padding-right: 15px; font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 5px;">
+                <li><strong>اسم القطة النشطة:</strong> رحلة شباب الاستراحة 🌴</li>
+                <li><strong>المسؤول عن الصرف:</strong> فهد الرويلي</li>
+                <li><strong>العداد الزمني لتجميد القطة:</strong> <span style="color: var(--danger); font-weight: bold;">02:41:15</span></li>
             </ul>
         </div>
 
+        <!-- 5. كشف الشفافية اللحظي للعميل ومجموعته -->
         <div class="card-white">
-            <div class="section-title">📊 كشف حساب الشفافية الفوري</div>
+            <div class="section-title">📊 كشف حساب الشفافية والرقابة الفورية</div>
             <div class="transactions-list" id="txList">
                 <div class="tx-item plus">
                     <div class="tx-info">
-                        <h5>ربط وتفويض المحفظة المؤقتة</h5>
-                        <span>موثق عبر نفاذ الرقمي ✓</span>
+                        <h5>ربط المحفظة وتفويض القطة المؤقتة</h5>
+                        <span>موثق بالكامل عبر نفاذ الرقمي ✓</span>
                     </div>
                     <div class="tx-amount" style="color: var(--success);">+300.00 ر.س</div>
                 </div>
@@ -320,11 +444,36 @@
 
     </main>
 
-    <footer style="background: var(--panel-white); border-top: 1px solid var(--border); padding: 15px; text-align: center; font-size: 10px; color: var(--text-muted);">
-        منظومة قطة الإنماء الذكية الابتكارية — نسخة الجوال © 2026
+    <footer style="background: var(--panel-white); border-top: 1px solid var(--border); padding: 15px; text-align: center; font-size: 9px; color: var(--text-muted);">
+        منظومة قطة الإنماء الذكية الابتكارية — محاكاة تفاعلية حية 100% للجوال © 2026
     </footer>
 
+    <!-- منطق العمل للتبديل بين القوائم والشاشات الفرعية حياً وبسرعة -->
     <script>
+        function toggleMenu(open) {
+            const menu = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            if(open) {
+                menu.classList.add('open');
+                overlay.style.display = 'block';
+            } else {
+                menu.classList.remove('open');
+                overlay.style.display = 'none';
+            }
+        }
+
+        function openSubScreen(screenId) {
+            // إغلاق المنيو المنبثق أولاً
+            toggleMenu(false);
+            // فتح الشاشة المطلوبة أمام العميل بالكامل
+            document.getElementById(screenId).style.display = 'flex';
+        }
+
+        function closeSubScreen(screenId) {
+            // إغلاق الشاشة والعودة لداشبورد التطبيق الرئيسي
+            document.getElementById(screenId).style.display = 'none';
+        }
+
         function simulateClientExpense() {
             const spentNum = document.getElementById('mySpentAmount');
             const refundNum = document.getElementById('myRefundableAmount');
@@ -346,21 +495,19 @@
             banner.style.backgroundColor = "#FEF2F2";
             banner.style.borderColor = "var(--danger)";
             banner.style.color = "#991B1B";
-            banner.innerHTML = "🔔 <strong>شفافية فورية:</strong> تم خصم قيمة عشاء المجموعة، الحصة المستقطعة من محفظتك هي <strong>100 ريال فقط</strong> وباقي رصيدك محمي تماماً.";
+            banner.innerHTML = "🔔 <strong>شفافية لحظية:</strong> تم سحب 400 ريال لشراء العشاء؛ حصتك المقتطعة بموجب الحوكمة هي <strong>100 ريال فقط</strong> وباقي حسابك الشخصي في أمان وعزل مطلق.";
 
             const txList = document.getElementById('txList');
             const newItem = document.createElement('div');
             newItem.className = "tx-item minus";
             newItem.innerHTML = `
                 <div class="tx-info">
-                    <h5>استقطاع عشاء المجموعة</h5>
-                    <span>بواسطة: فهد الرويلي</span>
+                    <h5>استقطاع جزئي (عشاء المجموعة)</h5>
+                    <span>منشئ الرابط: فهد الرويلي</span>
                 </div>
                 <div class="tx-amount" style="color: var(--danger);">-100.00 ر.س</div>
             `;
             txList.insertBefore(newItem, txList.firstChild);
-            
-            // تمرير تلقائي خفيف لأعلى الشاشة لإبراز البنر المحدث بالجوال
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -368,35 +515,25 @@
             const refundNum = document.getElementById('myRefundableAmount');
             refundNum.innerText = "0.00 ر.س";
             refundNum.classList.add('flash-update');
-            
-            const card = document.getElementById('mainBankCard');
-            const badge = document.getElementById('shieldBadge');
-            card.style.background = "linear-gradient(135deg, #475569, #1E293B)";
-            card.style.borderColor = "var(--border)";
-            badge.innerText = "🔒 تم إلغاء ربط البطاقة";
-            badge.style.background = "rgba(255,255,255,0.15)";
-            badge.style.color = "#FFF";
-            badge.style.animation = "none";
 
             const banner = document.getElementById('liveAlertBanner');
             banner.style.display = "block";
             banner.style.backgroundColor = "#EFF6FF";
             banner.style.borderColor = "var(--alinma-blue)";
             banner.style.color = "#1E40AF";
-            banner.innerHTML = "⏳ <strong>تصفية مؤتمتة:</strong> جُمّد الحساب التشاركي آلياً وفُسخ ارتباط بطاقتك، وعاد الرصيد المتبقي <strong>(200 ريال)</strong> لحسابك الأساسي بـ %0 رسوم.";
+            banner.innerHTML = "⏳ <strong>تصفية آلية صفر رسوم:</strong> انتهى الوقت! جُمّد الحساب التشاركي وفُسخ ربط جميع البطاقات آلياً، وعاد فائض أموالك وهو <strong>(200 ريال)</strong> لحسابك الجاري الأساسي بلا أي رسوم عمليات %0.";
 
             const txList = document.getElementById('txList');
             const newItem = document.createElement('div');
             newItem.className = "tx-item plus";
             newItem.innerHTML = `
                 <div class="tx-info">
-                    <h5>استرداد فائض تصفية القطة</h5>
-                    <span>تحويل داخلي آلي مجاني</span>
+                    <h5>استرداد آلي: فائض تصفية الحساب المؤقت</h5>
+                    <span>حوالة داخلية مجانية بالكامل %0 رسوم</span>
                 </div>
                 <div class="tx-amount" style="color: var(--success);">+200.00 ر.س</div>
             `;
             txList.insertBefore(newItem, txList.firstChild);
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
